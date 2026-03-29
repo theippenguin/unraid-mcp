@@ -1,10 +1,10 @@
 <?xml version='1.0' standalone='yes'?>
 <!DOCTYPE PLUGIN [
   <!ENTITY name      "unraid-mcp">
-  <!ENTITY author    "lherron">
+  <!ENTITY author    "theippenguin">
   <!ENTITY version   "2025.01.01">
-  <!ENTITY pluginURL "https://raw.githubusercontent.com/lherron/unraid-mcp/main/plugin/unraid-mcp.plg">
-  <!ENTITY source    "https://github.com/lherron/unraid-mcp/releases/download/&version;/unraid-mcp-&version;.txz">
+  <!ENTITY pluginURL "https://raw.githubusercontent.com/theippenguin/unraid-mcp/main/plugin/unraid-mcp.plg">
+  <!ENTITY source    "https://github.com/theippenguin/unraid-mcp/releases/download/2025.01.01/unraid-mcp-2025.01.01.txz">
   <!ENTITY MD5       "">
 ]>
 
@@ -12,14 +12,14 @@
          author="&author;"
          version="&version;"
          pluginURL="&pluginURL;"
-         support="https://github.com/lherron/unraid-mcp/issues"
+         support="https://github.com/theippenguin/unraid-mcp/issues"
          min="6.12.0">
 
 <CHANGES>
 ###2025.01.01
 - Initial release
 - MCP server for AI-powered Unraid management
-- 61 tools across 8 categories: Docker, VMs, Array, Shares, Users, System, Plugins, Network
+- Tools across 8 categories: Docker, VMs, Array, Shares, Users, System, Plugins, Network
 - GraphQL-first API (Unraid 7.2+) with CLI fallback
 - Streamable HTTP transport
 - API key authentication
@@ -32,13 +32,14 @@
 
 <FILE Name="/tmp/&name;-install.sh" Run="/bin/bash">
 <INLINE>
+<![CDATA[
 #!/bin/bash
 # Create config directory
 mkdir -p /boot/config/plugins/unraid-mcp
 
 # Create default config if it doesn't exist
 if [ ! -f /boot/config/plugins/unraid-mcp/config.env ]; then
-  cat > /boot/config/plugins/unraid-mcp/config.env << 'EOF'
+  cat > /boot/config/plugins/unraid-mcp/config.env << 'ENVEOF'
 # Unraid MCP Server Configuration
 # UNRAID_HOST is typically localhost when running on the same machine
 UNRAID_HOST=localhost
@@ -47,23 +48,26 @@ UNRAID_API_KEY=
 UNRAID_USE_TLS=false
 MCP_SERVER_PORT=3000
 LOG_LEVEL=info
-EOF
+ENVEOF
 fi
 
 # Enable and start the service
 chmod +x /etc/rc.d/rc.unraid-mcp 2>/dev/null || true
 /etc/rc.d/rc.unraid-mcp start 2>/dev/null || true
 echo "Unraid MCP plugin installed successfully"
+]]>
 </INLINE>
 </FILE>
 
 <FILE Name="/tmp/&name;-remove.sh" Run="/bin/bash" Method="remove">
 <INLINE>
+<![CDATA[
 #!/bin/bash
 /etc/rc.d/rc.unraid-mcp stop 2>/dev/null || true
 removepkg unraid-mcp 2>/dev/null || true
 rm -rf /usr/local/unraid-mcp
 echo "Unraid MCP plugin removed"
+]]>
 </INLINE>
 </FILE>
 
