@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.txz
+*.plg.sig
+.env
+.env.local
+*.log
+.DS_Store

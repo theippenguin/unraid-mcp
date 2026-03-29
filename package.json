@@ -1,0 +1,37 @@
+{
+  "name": "unraid-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for AI-powered Unraid server management",
+  "main": "dist/index.js",
+  "bin": {
+    "unraid-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "compile": "bun build src/index.ts --compile --outfile dist/unraid-mcp",
+    "package": "bash scripts/package.sh",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "graphql-request": "^7.0.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0"
+  },
+  "keywords": ["mcp", "unraid", "homelab", "ai", "claude"],
+  "author": "lherron",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
