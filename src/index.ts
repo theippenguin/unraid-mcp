@@ -1,5 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import * as http from "http";
+import { randomUUID } from "crypto";
 import { loadConfig } from "./lib/config.js";
 import { GraphQLClient } from "./lib/graphql.js";
 import { registerDockerTools } from "./tools/docker/index.js";
@@ -31,10 +33,16 @@ async function main(): Promise<void> {
   registerNetworkTools(server, graphqlClient);
 
   const transport = new StreamableHTTPServerTransport({
-    port: config.serverPort,
+    sessionIdGenerator: () => randomUUID(),
   });
 
   await server.connect(transport);
+
+  const httpServer = http.createServer((req, res) => {
+    transport.handleRequest(req, res);
+  });
+
+  await new Promise<void>((resolve) => httpServer.listen(config.serverPort, resolve));
 
   console.log(`Unraid MCP server listening on port ${config.serverPort}`);
   console.log(`Connected to Unraid at ${config.unraid.host}:${config.unraid.port}`);

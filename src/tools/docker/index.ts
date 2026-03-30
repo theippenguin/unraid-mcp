@@ -75,6 +75,7 @@ export function registerDockerTools(server: McpServer, client: GraphQLClient): v
     }
   );
 
+  // @ts-ignore TS2589: complex Zod + SDK overload resolution hits TypeScript's instantiation depth limit
   server.tool(
     "docker_start_container",
     "Start a stopped Docker container by name or ID",
